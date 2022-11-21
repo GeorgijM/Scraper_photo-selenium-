@@ -1,4 +1,5 @@
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 import time
 import urllib.request
 import os
@@ -48,9 +49,17 @@ if not os.path.isdir('Downloads'):
 
 # saving images on harddisk
 async def download_img(url):
-    print(f"Start downloading file {urls_img.index(url)}")
-    urllib.request.urlretrieve(url, f"./Downloads/{search_query}_{urls_img.index(url)}.jpg")
-    print(f"Finished downloading file {urls_img.index(url)}")
+    def func_for_executor():
+        print(f"Start downloading file {urls_img.index(url)}")
+        urllib.request.urlretrieve(url, f"./Downloads/{search_query}_{urls_img.index(url)}.jpg")
+        print(f"Finished downloading file {urls_img.index(url)}")
+
+    loop = asyncio.get_event_loop()
+    with ThreadPoolExecutor(max_workers=None) as executor:
+        print(f'ThreadPoolExecutor {i} started')
+        # print(f'{executor=}')
+        await loop.run_in_executor(executor, func_for_executor)
+        print(f'ThreadPoolExecutor {i} finished')
 
 
 async def main(urls_img_):
@@ -68,4 +77,3 @@ end = time.time() - start
 print(f"Time {end} sec")
 # close browser window
 driver.quit()
-
