@@ -56,10 +56,10 @@ async def download_img(url):
 
     loop = asyncio.get_event_loop()
     with ThreadPoolExecutor(max_workers=None) as executor:
-        print(f'ThreadPoolExecutor {i} started')
+        print(f'ThreadPoolExecutor started')
         # print(f'{executor=}')
         await loop.run_in_executor(executor, func_for_executor)
-        print(f'ThreadPoolExecutor {i} finished')
+        print(f'ThreadPoolExecutor finished')
 
 
 async def main(urls_img_):
